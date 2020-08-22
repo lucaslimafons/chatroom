@@ -2,12 +2,18 @@
 <html>
   <head>
     <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/index.css' />
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.7.5/dist/vuelidate.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.7.5/dist/validators.min.js"></script>
+    <script src="/scripts/main.js"></script>
   </head>
   <body>
-    {{{body}}}
+    <div class="container">
+      {{{body}}}
+    </div>
   </body>
 </html>

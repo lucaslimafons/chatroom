@@ -1,4 +1,6 @@
-$primaryColor: #eeffcc;
+@import 'sign-in.scss';
+
+$primaryColor: #f5f5f5;
 
 body {
     background: $primaryColor;
