@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{title}}</title>
+    <title>CHAT</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel='stylesheet' href='/stylesheets/index.css' />
+    <link rel="stylesheet" href="/stylesheets/index.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/vuelidate@0.7.5/dist/vuelidate.min.js"></script>
-    <script src="https://unpkg.com/vuelidate@0.7.5/dist/validators.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="/scripts/base.js"></script>
     <script src="/scripts/auth.js"></script>
@@ -16,7 +14,29 @@
   </head>
   <body>
     <div class="container">
-      {{{body}}}
+      <div id="logout">
+        <img src="/images/logo-jobsity.png" class="mb-5 text-center">
+
+        <div class="row justify-content-md-center">
+          <h1 class="w-100 text-center">Logging off...</h1>
+        </div>
+      </div>
     </div>
+    <script>
+      let app = new Vue({
+        el: '#logout',
+        mounted() {
+          Toast.fire({
+            icon: 'success',
+            title: 'Logging off!'
+          }).then(() => {
+            window.location.href = '/';
+          });
+        },
+        beforeMount() {
+          authService.logout();
+        }
+      });
+    </script>
   </body>
 </html>

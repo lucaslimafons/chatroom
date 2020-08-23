@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CHAT</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/index.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.7.5/dist/vuelidate.min.js"></script>
+    <script src="https://unpkg.com/vuelidate@0.7.5/dist/validators.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+    <script src="/scripts/base.js"></script>
+    <script src="/scripts/auth.js"></script>
+    <script src="/scripts/user.js"></script>
+    <script src="/scripts/main.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div id="chat">
+        <ul class="nav justify-content-end nav-fill mt-3">
+          <li>
+            <img src="/images/logo-jobsity.png" class="mb-5">
+          </li>
+          <li class="nav-item pt-3">
+            <a href="/logout" class="float-right">Logout</a>
+          </li>
+        </ul>
+
+        <div class="row justify-content-md-center">
+          <h1 class="w-100 text-center">Chat</h1>
+
+          <div class="col-3">
+            <div class="card">
+              <div class="card-header">
+                Online Users
+              </div>
+              <ul class="list-group list-group-flush">
+                <li v-for="user in onlineUsers" class="list-group-item">
+                  {{user.username}} <span class="badge badge-success">:)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-8">
+            <div class="card" id="chatbox">
+              <div class="card-header">
+                Chat
+              </div>
+              <div class="card-body">
+                <template v-for="message in lastMessages">
+                  <li v-if="username == message.username" class="list-group-item text-right">
+                     {{ message.message }}
+                  </li>
+                  <li v-else class="list-group-item">
+                    {{ message.username }}: {{ message.message }}
+                  </li>
+                </template>
+              </div>
+              <div class="card-footer">
+                <form @submit.prevent="send()">
+                  <div class="input-group mb-3">
+                    <input type="text"
+                      v-model="message"
+                      :class="{ 'is-invalid': $v.message.$error }"
+                      class="form-control"
+                      placeholder="Message"
+                      aria-describedby="sendMessage"
+                      @input="$v.message.$touch()"
+                      >
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="submit" id="sendMessage">Send</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="col-6">
+            <form @submit="signUp()">
+
+            </form>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const { required, minLength } = window.validators
+      const loggedUser = authService.getUser();
+      let socket = null;
+
+      let app = new Vue({
+        el: '#chat',
+        data: {
+          username: loggedUser.username,
+          message: '',
+          onlineUsers: [],
+          messages: []
+        },
+        validations: {
+          message: {
+            required,
+            minLength: minLength(1)
+          }
+        },
+        computed: {
+          lastMessages() {
+            let _lastMessages = _.takeRight(this.messages, 50);
+            let ordered = _.orderBy(_lastMessages, ['time'], ['asc']);
+            return ordered;
+          }
+        },
+        methods: {
+          async send() {
+            let vm = this;
+            if (this.$v.message.$invalid) {
+              this.$v.message.$touch();
+            } else {
+              socket.emit('message', {
+                message: this.message,
+                username: loggedUser.username,
+                time: moment()
+              });
+
+              this.message = "";
+              this.$v.$reset();
+            }
+          },
+          async getOnlineUsers() {
+            try {
+              const onlineUsers = await userService.getOnlineUsers();
+              this.onlineUsers = onlineUsers;
+            } catch (e) {
+              console.log(e);
+            }
+          }
+        },
+        created: function () {
+          socket = io();
+
+          socket.emit('join', {
+            userId: loggedUser.id,
+            username: loggedUser.username
+          });
+        },
+        mounted: function () {
+          socket.on('online', function () {
+            app.getOnlineUsers();
+          });
+
+          socket.on('message', function (message) {
+            app.messages.push(message);
+
+            app.$nextTick(function () {
+              let chatbox = document.getElementById('chatbox');
+              chatbox.scrollTop = chatbox.scrollHeight;
+            });
+          });
+        },
+        beforeMount() {
+          if (!authService.isLoggedIn()) {
+            window.location.href = '/';
+          }
+        }
+      })
+    </script>
+  </body>
+</html>

@@ -45,7 +45,7 @@ class AuthService extends BaseService {
         token: authHelper.createHash(model.username)
       };
 
-      await userService.create(user, transaction);
+      user = await userService.create(user, transaction);
 
       user.password = null;
 

@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "AAAA,OAAQ;EACN,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,IAAI;EAEpB,sBAAO;IACL,MAAM,EAAE,MAAM;IACd,OAAO,EAAE,KAAK;;ACNlB,OAAQ;EACN,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,IAAI;EAEpB,sBAAO;IACL,MAAM,EAAE,MAAM;IACd,OAAO,EAAE,KAAK;;ACDlB,IAAK;EACD,UAAU,EAHC,OAAO",
-"sources": ["../../assets/scss/sign-in.scss","../../assets/scss/sign-up.scss","../../assets/scss/index.scss"],
+"mappings": "AAAA,OAAQ;EACN,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,IAAI;EAEpB,sBAAO;IACL,MAAM,EAAE,MAAM;IACd,OAAO,EAAE,KAAK;;ACNlB,OAAQ;EACN,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,IAAI;EAEpB,sBAAO;IACL,MAAM,EAAE,MAAM;IACd,OAAO,EAAE,KAAK;;ACNlB,KAAM;EACJ,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,IAAI;EAEpB,kBAAO;IACL,MAAM,EAAE,MAAM;IACd,OAAO,EAAE,KAAK;EAId,cAAO;IACL,MAAM,EAAE,KAAK;IACb,UAAU,EAAE,MAAM;;ACNxB,IAAK;EACD,UAAU,EAHC,OAAO",
+"sources": ["../../assets/scss/sign-in.scss","../../assets/scss/sign-up.scss","../../assets/scss/chat.scss","../../assets/scss/index.scss"],
 "names": [],
 "file": "index.css"
 }

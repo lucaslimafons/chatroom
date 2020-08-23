@@ -6,4 +6,11 @@
     margin: 0 auto;
     display: block;
   }
+
+  div {
+    &.card {
+      height: 400px;
+      overflow-y: scroll;
+    }
+  }
 }

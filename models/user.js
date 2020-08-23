@@ -24,11 +24,27 @@ module.exports = function (sequelize, DataTypes) {
     }
   },
   {
+    getterMethods: {
+      online: function () {
+        console.log(this.chats);
+        return true;
+      }
+    },
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     freezeTableName: true
   });
+
+  User.associate = function (models) {
+    User.hasMany(models.userChat, {
+      as: 'chats',
+      foreignKey: { name: 'id_user', allowNull: false },
+      constraints: true,
+      onUpdate: "NO ACTION",
+      onDelete: "NO ACTION"
+    });
+  }
 
   return User;
 };

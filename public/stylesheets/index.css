@@ -12,6 +12,16 @@
     margin: 0 auto;
     display: block; }
 
+#chat {
+  padding-top: 60px;
+  padding-bottom: 60px; }
+  #chat img, #chat a {
+    margin: 0 auto;
+    display: block; }
+  #chat div.card {
+    height: 400px;
+    overflow-y: scroll; }
+
 body {
   background: #f5f5f5; }
 

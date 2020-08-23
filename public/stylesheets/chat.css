@@ -4,5 +4,8 @@
   #chat img, #chat a {
     margin: 0 auto;
     display: block; }
+  #chat div.card {
+    height: 400px;
+    overflow-y: scroll; }
 
 /*# sourceMappingURL=chat.css.map */

@@ -5,11 +5,19 @@ const messages = require('../helpers/messages');
 const authHelper = require('../helpers/auth');
 
 class UserService extends BaseService {
-  async listAll() {
+  async findOnlineUsers() {
     try {
-      return await models.user.findAll({ });
+      return await models.user.findAll({
+        attributes: ['id', 'username'],
+        include: {
+          model: models.userChat,
+          as: 'chats',
+          required: true,
+          attributes: ['id']
+        }
+      });
     } catch (e) {
-      throw new DWError("Error", this.getErrors(e));
+      throw new ChatError("Error", this.getErrors(e));
     }
   }
 
@@ -17,7 +25,7 @@ class UserService extends BaseService {
     try {
       return await this.findOne({ where: { id: id } });
     } catch (e) {
-      throw new DWError("Error", this.getErrors(e));
+      throw new ChatError("Error", this.getErrors(e));
     }
   }
 
@@ -25,7 +33,7 @@ class UserService extends BaseService {
     try {
       return await models.user.findOne({ where: { username: username } });
     } catch (e) {
-      throw new DWError("Error", this.getErrors(e));
+      throw new ChatError("Error", this.getErrors(e));
     }
   }
 
@@ -33,7 +41,7 @@ class UserService extends BaseService {
     try {
       return await models.user.findOne({ where: { token: token } });
     } catch (e) {
-      throw new DWError("Error", this.getErrors(e));
+      throw new ChatError("Error", this.getErrors(e));
     }
   }
 
@@ -63,9 +71,7 @@ class UserService extends BaseService {
     if (!transaction) transaction = await models.sequelize.transaction({ autocommit: false });
 
     try {
-      console.log(model);
-      let a = await models.user.update(model, { where: { id: id } }, { transaction });
-      console.log(a);
+      await models.user.update(model, { where: { id: id } }, { transaction });
 
       if (commit) await transaction.commit();
     } catch (e) {

@@ -7,9 +7,10 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const moverride = require('method-override');
 const session = require('express-session');
-const exphbs  = require('express-handlebars');
 const cors = require('./cors');
 require('dotenv').config();
+const passport = require('passport');
+require('./passport');
 
 let app = express();
 
@@ -21,15 +22,10 @@ app.use(cookieParser());
 app.use(moverride('X-HTTP-Method-Override'));
 app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }))
 app.use(express.static(path.join(process.cwd(), 'public')));
-app.engine('handlebars', exphbs());
 app.set('views', path.join(process.cwd(), 'views'));
-app.set('view engine', 'handlebars');
-
-// app.use(passport.initialize())
-//
-// app.use(passport.session())
-
 app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', routes);
 
