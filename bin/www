@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const app = require('../app');
+const app = require('../server/app');
 const debug = require('debug')('chatroom:server');
 const models  = require('../models');
 const http = require('http');

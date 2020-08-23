@@ -1,7 +1,14 @@
 #signIn {
   padding-top: 60px;
   padding-bottom: 60px; }
-  #signIn img {
+  #signIn img, #signIn a {
+    margin: 0 auto;
+    display: block; }
+
+#signUp {
+  padding-top: 60px;
+  padding-bottom: 60px; }
+  #signUp img, #signUp a {
     margin: 0 auto;
     display: block; }
 

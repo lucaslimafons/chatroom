@@ -1,7 +1,7 @@
 {
 "version": 3,
 "mappings": "AAAA,OAAQ;EACN,WAAW,EAAE,IAAI;EACjB,cAAc,EAAE,IAAI;EAEpB,sBAAO;IACL,MAAM,EAAE,MAAM;IACd,OAAO,EAAE,KAAK",
-"sources": ["../../assets/scss/sign-in.scss"],
+"sources": ["../../assets/scss/sign-up.scss"],
 "names": [],
-"file": "sign-in.css"
+"file": "sign-up.css"
 }

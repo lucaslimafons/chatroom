@@ -30,13 +30,10 @@
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Submit</button>
+
+        <a href="/signup" class="mt-5 text-center">Not registered yet? Sign up!</a>
       </form>
     </div>
-    <!-- <div class="col-6">
-      <form @submit="signUp()">
-
-      </form>
-    </div> -->
   </div>
 </div>
 <script>
@@ -64,16 +61,33 @@
     },
     methods: {
       async signIn() {
+        let vm = this;
         if (this.$v.model.$invalid) {
           this.$v.model.$touch();
         } else {
           try {
-            let ret = await axios.post('/cliente', this.model);
-            console.log(ret)
-          } catch (e) {
+            const ret = await authService.login(this.model);
 
+            Toast.fire({
+              icon: 'success',
+              title: 'Signed in successfully'
+            }).then(() => {
+              window.location.href = '/chat';
+            });
+          } catch (e) {
+            if (e && e.length > 0) {
+              Toast.fire({
+                icon: 'error',
+                title: e[0].message
+              });
+            }
           }
         }
+      }
+    },
+    beforeMount() {
+      if (authService.isLoggedIn()) {
+        window.location.href = '/chat';
       }
     }
   });

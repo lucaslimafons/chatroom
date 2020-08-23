@@ -2,6 +2,7 @@ const models = require('../models');
 const BaseService = require('./base');
 const ChatError = require('../helpers/error');
 const messages = require('../helpers/messages');
+const authHelper = require('../helpers/auth');
 
 class UserService extends BaseService {
   async listAll() {
@@ -45,8 +46,8 @@ class UserService extends BaseService {
 
       model.password = authHelper.createHash(model.password);
 
-      await models.usuario.build(model).validate();
-      model = await models.usuario.create(model, { transaction });
+      await models.user.build(model).validate();
+      model = await models.user.create(model, { transaction });
 
       if (commit) await transaction.commit();
 
@@ -57,16 +58,16 @@ class UserService extends BaseService {
     }
   }
 
-  async update(model, transaction) {
+  async update(id, model, transaction) {
     const commit = !transaction;
     if (!transaction) transaction = await models.sequelize.transaction({ autocommit: false });
 
     try {
-      model = await models.user.update(model, { where: { id: model.id } }, { transaction });
+      console.log(model);
+      let a = await models.user.update(model, { where: { id: id } }, { transaction });
+      console.log(a);
 
       if (commit) await transaction.commit();
-
-      return model;
     } catch (e) {
       if (commit) await transaction.rollback();
       throw new ChatError("Error", this.getErrors(e));

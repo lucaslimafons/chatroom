@@ -1,13 +1,14 @@
 const express = require('express');
 const path = require('path');
-const routes = require('./routes/index')
+const routes = require('../routes/index')
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const moverride = require('method-override');
 const session = require('express-session');
-var exphbs  = require('express-handlebars');
+const exphbs  = require('express-handlebars');
+const cors = require('./cors');
 require('dotenv').config();
 
 let app = express();
@@ -19,26 +20,16 @@ app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }))
 app.use(cookieParser());
 app.use(moverride('X-HTTP-Method-Override'));
 app.use(session({ secret: process.env.SESSION_SECRET, resave: true, saveUninitialized: true }))
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(process.cwd(), 'public')));
 app.engine('handlebars', exphbs());
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(process.cwd(), 'views'));
 app.set('view engine', 'handlebars');
 
 // app.use(passport.initialize())
 //
 // app.use(passport.session())
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Max-Age", "1000");
-  res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Origin, Authorization, Accept, Accept-Encoding");
-  if ('OPTIONS' == req.method) {
-    return res.sendStatus(200);
-  } else {
-    next();
-  }
-});
+app.use(cors());
 
 app.use('/', routes);
 

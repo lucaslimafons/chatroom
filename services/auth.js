@@ -5,9 +5,6 @@ const stringHelper = require('../helpers/string');
 const authHelper = require('../helpers/auth');
 const userService = require('./user');
 const messages = require('../helpers/messages');
-// const moment = require('moment-timezone');
-// const sequelize = require('sequelize');
-// const Op = sequelize.Op;
 
 class AuthService extends BaseService {
   async login(model) {
@@ -21,11 +18,11 @@ class AuthService extends BaseService {
       let user = await userService.findByUsername(model.username);
 
       if (!user || !authHelper.isValidPassword(user, model.password))
-        throw new ChatError(messages.invalid_credentials, { status: 401 });
+        throw new ChatError(messages.invalid_credentials, { status: 422 });
 
       user.token = authHelper.createHash(model.username);
 
-      await userService.update(user, transaction);
+      await userService.update(user.id, { token: user.token }, transaction);
 
       user.password = null;
 

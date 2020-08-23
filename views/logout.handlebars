@@ -1,0 +1,23 @@
+<div id="logout">
+  <img src="/images/logo-jobsity.png" class="mb-5 text-center">
+
+  <div class="row justify-content-md-center">
+    <h1 class="w-100 text-center">Logging off...</h1>
+  </div>
+</div>
+<script>
+  let app = new Vue({
+    el: '#logout',
+    mounted() {
+      Toast.fire({
+        icon: 'success',
+        title: 'Logging off!'
+      }).then(() => {
+        window.location.href = '/';
+      });
+    },
+    beforeMount() {
+      authService.logout();
+    }
+  });
+</script>

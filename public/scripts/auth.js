@@ -1,28 +1,31 @@
-export default class AuthService {
+class AuthService {
   async login(user) {
     try {
-      let token = btoa(user.username + ':' + user.password);
-      let auth_header = 'Basic ' + token;
-
-      const response = await axios.get('/auth/login', {
-        headers: { Authorization: auth_header, Accept: 'application/json' }
-      });
-
-      console.log(response);
+      const response = await axios.post('/auth/login', user);
 
       if (response.status === 200) {
         let user = response.data.data;
-
-        if (user.ativo) {
-          user.token = token;
-          this.setUser(user);
-        }
+        this.setUser(user);
 
         return user;
       }
     } catch (e) {
-      console.log(e)
-      // throw this.getErrors(e);
+      throw baseService.getErrors(e);
+    }
+  }
+
+  async signUp(user) {
+    try {
+      const response = await axios.post('/auth/signup', user);
+
+      if (response.status === 200) {
+        let user = response.data.data;
+        this.setUser(user);
+
+        return user;
+      }
+    } catch (e) {
+      throw baseService.getErrors(e);
     }
   }
 
@@ -36,6 +39,7 @@ export default class AuthService {
   }
 
   setUser(user) {
+    document.cookie = `token=${user.token}`;
     window.localStorage.setItem('chatroom', JSON.stringify(user));
   }
 
@@ -43,3 +47,5 @@ export default class AuthService {
     return JSON.parse(window.localStorage.getItem('chatroom'));
   }
 }
+
+const authService = new AuthService();
