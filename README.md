@@ -36,12 +36,19 @@ $ npm run zookeeper
 $ npm run kafka
 ```
 
-7. Run the project
+7. Create topics
+```
+$ kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic parse_stock_quote
+
+$ kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic result_stock_quote
+```
+
+8. Run the project
 ```
 npm start
 ```
 
-8. Test command
+9. Test command
 ```
 npm run test
 ```
