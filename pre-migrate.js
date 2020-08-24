@@ -11,8 +11,14 @@ mysql.createConnection({
   user: config[env].username,
   password: config[env].password,
 }).then((connection) => {
-  connection.query(`CREATE DATABASE IF NOT EXISTS ${config[env].database};`).then((res) => {
-      console.info("Database create or successfully checked");
-      process.exit(0);
+  let queries = [];
+  if (env === 'test') {
+    queries.push(connection.query(`DROP DATABASE IF EXISTS ${config[env].database};`));
+  }
+  queries.push(connection.query(`CREATE DATABASE IF NOT EXISTS ${config[env].database};`));
+
+  Promise.all(queries).then((res) => {
+    console.info("Database created or successfully checked");
+    process.exit(0);
   });
 })

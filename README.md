@@ -11,15 +11,15 @@ $ npm install
 ```
 
 2. Create an environment file (you can use the .env.dev to run locally or .env.prod to use aws rds database)
+> If you would like to use your local database you must follow the step 3, if you wouldn't then go to step 4
 
-If you would like to use your local database you must follow the step 3, if you wouldn't then go to step 4
 3. To create the database you should run the follow command with the environment variable:
 ```
 $ npm run migrate $1
 ```
 Example:
 ```
-$ npm run migrate test
+$ npm run migrate development
 ```
 
 (Please take a look on config/database.js file.)
@@ -39,6 +39,11 @@ $ npm run kafka
 7. Run the project
 ```
 npm start
+```
+
+8. Test command
+```
+npm run test
 ```
 
 That's it!
