@@ -48,7 +48,9 @@
                   @input="$v.model.password.$touch()">
               </div>
 
-              <button type="submit" class="btn btn-primary btn-block">Submit</button>
+              <button type="submit" class="btn btn-primary btn-block" :disabled="isLoading">
+                Submit
+              </button>
 
               <a href="/" class="mt-5 text-center">Already registered? Sign in!</a>
             </form>
@@ -65,7 +67,8 @@
           model: {
             username: '',
             password: ''
-          }
+          },
+          isLoading: false
         },
         validations: {
           model: {
@@ -87,6 +90,8 @@
               this.$v.model.$touch();
             } else {
               try {
+                this.isLoading = true;
+
                 const ret = await authService.signUp(this.model);
 
                 Toast.fire({
@@ -96,6 +101,7 @@
                   window.location.href = '/chat';
                 });
               } catch (e) {
+                vm.isLoading = false;
                 if (e && e.length > 0) {
                   for (let error of e) {
                     Toast.fire({

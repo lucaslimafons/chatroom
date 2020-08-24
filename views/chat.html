@@ -20,12 +20,12 @@
   <body>
     <div class="container">
       <div id="chat">
-        <ul class="nav justify-content-end nav-fill mt-3">
+        <ul class="nav justify-content-end nav-fill">
           <li class="nav-item">
-            <img src="/images/logo-jobsity.png" class="mb-5">
+            <img src="/images/logo-jobsity.png">
           </li>
           <li class="nav-item">
-            Hello, username!
+            Hello, {{ username }}!
           </li>
           <li class="nav-item">
             <a href="/logout">Logout</a>
@@ -33,7 +33,9 @@
         </ul>
 
         <div class="row justify-content-md-center">
-          <h1 class="w-100 text-center">Chat</h1>
+          <h1 class="w-100 text-center">
+            Chat
+          </h1>
 
           <div class="col-3">
             <div class="card">
@@ -52,6 +54,15 @@
             <div class="card" id="chatbox">
               <div class="card-header">
                 Chat
+
+                <p class="card-text">
+                  <small class="text-muted">
+                    Try to get an stock quote typing:
+                  </small>
+                  <small class="text-muted text-monospace">
+                    /stock=STOCK_CODE
+                  </small>
+                </p>
               </div>
               <div class="card-body">
                 <template v-for="message in lastMessages">
@@ -119,14 +130,34 @@
             if (this.$v.message.$invalid) {
               this.$v.message.$touch();
             } else {
-              socket.emit('message', {
-                message: this.message,
-                username: loggedUser.username,
-                time: moment()
-              });
+              if (this.message.startsWith('/stock=')) {
+                let code = this.message.substr(this.message.indexOf('=')+1);
+                await this.getStockQuote(code);
+              } else {
+                socket.emit('message', {
+                  message: this.message,
+                  username: loggedUser.username,
+                  time: moment()
+                });
+              }
 
               this.message = "";
               this.$v.$reset();
+            }
+          },
+          async getStockQuote(code) {
+            try {
+              await userService.getStockQuote(code);
+              Toast.fire({
+                icon: 'success',
+                title: 'Stock quote requested successfully.'
+              });
+            } catch (e) {
+              console.log(e);
+              Toast.fire({
+                icon: 'error',
+                title: 'A problem occurred with your stock quote request please try again.'
+              });
             }
           },
           async getOnlineUsers() {

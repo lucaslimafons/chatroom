@@ -13,13 +13,13 @@
     display: block; }
 
 #chat {
-  padding-top: 60px;
+  padding-top: 40px;
   padding-bottom: 60px; }
   #chat img, #chat a {
     margin: 0 auto;
     display: block; }
   #chat div.card {
-    height: 400px;
+    height: 500px;
     overflow-y: scroll; }
 
 body {

@@ -8,6 +8,8 @@
     "test": "NODE_ENV=test mocha",
     "watch": "sass --watch ./assets/scss:public/stylesheets",
     "pre-migrate": "node pre-migrate.js",
+    "zookeeper": "zookeeper-server-start /usr/local/etc/kafka/zookeeper.properties",
+    "kafka": "kafka-server-start /usr/local/etc/kafka/server.properties",
     "migrate": "NODE_ENV=$1 && npm run pre-migrate && sequelize db:migrate --env $1",
     "undo_migrate": "sequelize db:migrate:undo --env $1"
   },
@@ -22,6 +24,7 @@
     "express-session": "^1.17.1",
     "fast-csv": "^4.3.1",
     "http-errors": "~1.6.3",
+    "kafka-node": "^5.0.0",
     "method-override": "^3.0.0",
     "moment": "^2.27.0",
     "morgan": "~1.9.1",

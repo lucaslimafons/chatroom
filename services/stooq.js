@@ -13,6 +13,8 @@ class StooqService extends BaseService {
         throw new ChatError(messages.stock_code_required, { field: null, status: 422 });
       }
 
+      code = code.replace(/\s+/g, '');
+
       let csv = await this.getStockQuoteApi(code);
 
       let data = await this.parseStockQuoteData(csv);
@@ -28,7 +30,7 @@ class StooqService extends BaseService {
         }
       }
 
-      return data;
+      throw new ChatError(messages.stock_quote_error, { field: null, status: 422 });
     } catch (e) {
       console.log(e);
       throw new ChatError("Error", this.getErrors(e));

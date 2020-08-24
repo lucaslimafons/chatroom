@@ -20,15 +20,4 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-const stooqService = require('../../services/stooq');
-router.get('/test', async (req, res) => {
-  try {
-    let data = await stooqService.getStockQuote('aapl.us');
-    return res.json({ data: data, errors: null });
-  } catch (err) {
-    console.log(err);
-    return res.status(err.data.status).json({ data: null, errors: err.data.errors });
-  }
-});
-
 module.exports = router;

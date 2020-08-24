@@ -3,6 +3,7 @@ const BaseService = require('./base');
 const ChatError = require('../helpers/error');
 const messages = require('../helpers/messages');
 const authHelper = require('../helpers/auth');
+const stringHelper = require('../helpers/string');
 
 class UserService extends BaseService {
   async findOnlineUsers() {
@@ -39,8 +40,20 @@ class UserService extends BaseService {
 
   async findByToken(token) {
     try {
-      return await models.user.findOne({ where: { token: token } });
+      let user = null;
+
+      if (!stringHelper.isUndefinedOrNullOrEmpty(token)) {
+        user = await models.user.findOne({
+          attributes: {
+            exclude: ['password']
+          },
+          where: { token: token }
+        });
+      }
+
+      return user;
     } catch (e) {
+      console.log(e)
       throw new ChatError("Error", this.getErrors(e));
     }
   }

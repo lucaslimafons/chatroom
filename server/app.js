@@ -29,6 +29,10 @@ app.use(passport.session());
 
 app.use('/', routes);
 
+require('./kafka');
+require('./kafka-producer');
+require('./kafka-consumer');
+
 // Production error handler
 if (app.get('env') === 'production') {
   app.use(function (err, req, res, next) {

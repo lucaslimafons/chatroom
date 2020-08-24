@@ -1,5 +1,5 @@
 #chat {
-  padding-top: 60px;
+  padding-top: 40px;
   padding-bottom: 60px;
 
   img, a {
@@ -9,7 +9,7 @@
 
   div {
     &.card {
-      height: 400px;
+      height: 500px;
       overflow-y: scroll;
     }
   }

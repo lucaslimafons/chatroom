@@ -57,6 +57,7 @@ class UserChatService extends BaseService {
       await transaction.commit();
     } catch (e) {
       await transaction.rollback();
+      console.log(e);
       throw new ChatError("Error", this.getErrors(e));
     }
   }
