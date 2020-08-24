@@ -63,6 +63,6 @@ the bot.
 messages.
 
 ### Optional
-- [] Have more than one chatroom.
-- [] Unit test the functionality you prefer.
+- [] Have more than one chatroom. (Could not start this one, I need to sleep :( haha)
+- [x] Unit test the functionality you prefer.
 - [x] Handle messages that are not understood or any exceptions raised within the bot.
