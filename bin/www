@@ -93,4 +93,6 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-module.exports = server;
+if (process.env.NODE_ENV == 'test') {
+  module.exports = server;
+}
