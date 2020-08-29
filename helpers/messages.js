@@ -2,6 +2,7 @@ module.exports = {
   'invalid_credentials': 'Invalid credentials!',
   'username_required': 'Username is required.',
   'password_required': 'Password is required.',
+  'message_required': 'Message is required.',
   'socket_required': 'Socket is required.',
   'username_used': 'Username already in use!',
   'error_try_again': 'An error occurred, please try again later.',

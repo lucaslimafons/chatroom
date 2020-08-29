@@ -1,11 +1,26 @@
+#signIn {
+  padding-top: 60px;
+  padding-bottom: 60px; }
+  #signIn img, #signIn a {
+    margin: 0 auto;
+    display: block; }
+
+#signUp {
+  padding-top: 60px;
+  padding-bottom: 60px; }
+  #signUp img, #signUp a {
+    margin: 0 auto;
+    display: block; }
+
 #chat {
   padding-top: 40px;
   padding-bottom: 60px; }
   #chat img, #chat a {
     margin: 0 auto;
     display: block; }
-  #chat div.card {
+  #chat div.card-body {
     height: 500px;
     overflow-y: scroll; }
 
-/*# sourceMappingURL=chat.css.map */
+body {
+  background: #f5f5f5; }

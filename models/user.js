@@ -24,12 +24,6 @@ module.exports = function (sequelize, DataTypes) {
     }
   },
   {
-    getterMethods: {
-      online: function () {
-        console.log(this.chats);
-        return true;
-      }
-    },
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',

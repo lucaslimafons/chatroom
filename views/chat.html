@@ -15,6 +15,7 @@
     <script src="/scripts/base.js"></script>
     <script src="/scripts/auth.js"></script>
     <script src="/scripts/user.js"></script>
+    <script src="/scripts/message.js"></script>
     <script src="/scripts/main.js"></script>
   </head>
   <body>
@@ -38,7 +39,7 @@
           </h1>
 
           <div class="col-3">
-            <div class="card">
+            <div class="card online-users">
               <div class="card-header">
                 Online Users
               </div>
@@ -51,7 +52,7 @@
           </div>
 
           <div class="col-8">
-            <div class="card" id="chatbox">
+            <div class="card">
               <div class="card-header">
                 Chat
 
@@ -64,13 +65,13 @@
                   </small>
                 </p>
               </div>
-              <div class="card-body">
-                <template v-for="message in lastMessages">
-                  <li v-if="username == message.username" class="list-group-item text-right">
+              <div id="chatbox" class="card-body">
+                <template v-for="message in messages">
+                  <li v-if="!message.fromServer && username == message.user.username" class="list-group-item text-right">
                      {{ message.message }}
                   </li>
                   <li v-else class="list-group-item">
-                    {{ message.username }}: {{ message.message }}
+                    {{ !message.fromServer ? message.user.username : 'server' }}: {{ message.message }}
                   </li>
                 </template>
               </div>
@@ -109,7 +110,8 @@
           username: loggedUser.username,
           message: '',
           onlineUsers: [],
-          messages: []
+          messages: [],
+          online: false
         },
         validations: {
           message: {
@@ -120,8 +122,9 @@
         computed: {
           lastMessages() {
             let _lastMessages = _.takeRight(this.messages, 50);
-            let ordered = _.orderBy(_lastMessages, ['time'], ['asc']);
-            return ordered;
+            // let ordered = _.orderBy(_lastMessages, ['time'], ['asc']);
+            // return ordered;
+            return _lastMessages;
           }
         },
         methods: {
@@ -137,6 +140,7 @@
                 socket.emit('message', {
                   message: this.message,
                   username: loggedUser.username,
+                  id: loggedUser.id,
                   time: moment()
                 });
               }
@@ -167,7 +171,22 @@
             } catch (e) {
               console.log(e);
             }
+          },
+          async getLastMessages() {
+            try {
+              const lastMessages = await messageService.getLastMessages();
+              app.messages = lastMessages;
+            } catch (e) {
+              console.log(e);
+            }
+          },
+          adjustChat() {
+            let chatbox = document.getElementById('chatbox');
+            chatbox.scrollTop = chatbox.scrollHeight;
           }
+        },
+        updated() {
+          app.adjustChat();
         },
         created: function () {
           socket = io();
@@ -179,15 +198,18 @@
         },
         mounted: function () {
           socket.on('online', function () {
-            app.getOnlineUsers();
+            if (!app.online) {
+              app.getOnlineUsers();
+              app.getLastMessages();
+              app.online = true;
+            }
           });
 
           socket.on('message', function (message) {
             app.messages.push(message);
 
             app.$nextTick(function () {
-              let chatbox = document.getElementById('chatbox');
-              chatbox.scrollTop = chatbox.scrollHeight;
+              app.adjustChat();
             });
           });
         },

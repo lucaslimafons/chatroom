@@ -4,6 +4,7 @@ const ChatError = require('../helpers/error');
 const messages = require('../helpers/messages');
 const moment = require('moment');
 const userChatService = require('./user_chat');
+const messageService = require('./message');
 
 class ChatService extends BaseService {
   constructor (io) {
@@ -31,11 +32,14 @@ class ChatService extends BaseService {
 
       // SHOWS TO EVERYONE THAT THE NEW USER JOINED TO THE CHAT
       if (numChats == 0) {
-        socket.broadcast.emit('message', {
-          'username': 'server',
-          'message': data.username + ' has joined!',
-          'time': moment()
+        let message = await messageService.create({
+          message: data.username + ' has joined!',
+          fromServer: true
         });
+
+        message = await messageService.findById(message.id);
+
+        socket.broadcast.emit('message', message);
       }
     } catch (e) {
       console.log(e);
@@ -44,12 +48,14 @@ class ChatService extends BaseService {
 
   async message(data) {
     try {
-      // HERE WE COULD SAVE ALL MESSAGES IF NECESSARY
-      this.io.emit('message', {
-        'username': data.username,
-        'message': data.message,
-        'time': data.time
+      let message = await messageService.create({
+        message: data.message,
+        id_user: data.id
       });
+
+      message = await messageService.findById(message.id);
+
+      this.io.emit('message', message);
     } catch (e) {
       console.log(e);
     }

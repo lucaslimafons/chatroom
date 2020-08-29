@@ -45,15 +45,20 @@ $ kafka-topics --create --zookeeper localhost:2181 --replication-factor 1 --part
 
 8. Run the project
 ```
-npm start
+$ npm start
 ```
 
 9. Test command
 ```
-npm run test
+$ npm run test
 ```
 
 That's it!
+
+If you want you can build the css file running
+```
+$ node-sass assets/scss/index.scss public/stylesheets/index.css -w
+```
 
 ### Mandatory
 - [x] Allow registered users to log in and talk with other users in a chatroom.
