@@ -3,6 +3,9 @@
 ### Technologies
 > Nodejs v12, MySQL, Kafka
 
+You need to run Chatroom Stock too!
+[Click here](https://github.com/lucaslimafons/chatroom-stock)
+
 ### Steps
 
 1. First of all run

@@ -1,43 +1,29 @@
 const BaseService = require('./base');
 const ChatError = require('../helpers/error');
-const kafkaProducer = require('../server/kafka-producer');
-const stooqService = require('./stooq');
-const producerService = require('./producer');
 const moment = require('moment');
+const userService = require('./user');
+const messageService = require('./message');
 
 class ConsumerService extends BaseService {
-  async parseStockQuote(code, user) {
-    let result = {
-      code: code,
-      user: user
-    };
-
+  async resultStockQuote(code, idUser, result) {
     try {
-      let stockQuote = await stooqService.getStockQuote(code);
-      result.result = stockQuote;
-      producerService.sendResultStockQuote(JSON.stringify(result));
-    } catch (e) {
-      console.log(e);
-      result.result = e;
-      producerService.sendResultStockQuote(JSON.stringify(result));
-    }
-  }
 
-  async resultStockQuote(code, user, result) {
-    try {
-      let message = '';
+      let user = await userService.findById(idUser);
+
+      let text = '';
       if (result.data && result.data.errors && result.data.errors.length > 0) {
         let error = result.data.errors[0].message;
-        message = `Stock quote result for ${user.username}: ${error}`;
+        text = `Stock quote result for ${user.username}: ${error}`;
       } else {
-        message = `Stock quote result ${user.username}: ${result}`;
+        text = `Stock quote result ${user.username}: ${result}`;
       }
 
-      global.io.emit('message', {
-        'username': 'server',
-        'message': message,
-        'time': moment()
+      let message = await messageService.create({
+        message: text,
+        fromServer: true
       });
+
+      global.io.emit('message', message);
     } catch(e) {
       console.log(e);
     }

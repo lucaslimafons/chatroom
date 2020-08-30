@@ -30,7 +30,6 @@ app.use(passport.session());
 app.use('/', routes);
 
 require('./kafka');
-require('./kafka-producer');
 require('./kafka-consumer');
 
 // Production error handler

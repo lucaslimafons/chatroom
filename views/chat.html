@@ -133,17 +133,12 @@
             if (this.$v.message.$invalid) {
               this.$v.message.$touch();
             } else {
-              if (this.message.startsWith('/stock=')) {
-                let code = this.message.substr(this.message.indexOf('=')+1);
-                await this.getStockQuote(code);
-              } else {
-                socket.emit('message', {
-                  message: this.message,
-                  username: loggedUser.username,
-                  id: loggedUser.id,
-                  time: moment()
-                });
-              }
+              socket.emit('message', {
+                message: this.message,
+                username: loggedUser.username,
+                id: loggedUser.id,
+                time: moment()
+              });
 
               this.message = "";
               this.$v.$reset();
@@ -175,7 +170,8 @@
           async getLastMessages() {
             try {
               const lastMessages = await messageService.getLastMessages();
-              app.messages = lastMessages;
+              app.messages = _.orderBy(lastMessages, ['id'], ['asc']);
+
             } catch (e) {
               console.log(e);
             }
@@ -199,10 +195,11 @@
         mounted: function () {
           socket.on('online', function () {
             if (!app.online) {
-              app.getOnlineUsers();
               app.getLastMessages();
               app.online = true;
             }
+
+            app.getOnlineUsers();
           });
 
           socket.on('message', function (message) {

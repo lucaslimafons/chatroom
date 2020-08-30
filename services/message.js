@@ -8,9 +8,8 @@ class MessageService extends BaseService {
   async getLastMessages() {
     try {
       return await models.message.findAll({
-        limt: 50,
-        order: [['id', 'asc']],
-        where: { fromServer: false },
+        limit: 50,
+        order: [['id', 'desc']],
         include: {
           model: models.user,
           attributes: ['id', 'username']

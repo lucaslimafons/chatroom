@@ -24,7 +24,7 @@ class UserService extends BaseService {
 
   async findById(id) {
     try {
-      return await this.findOne({ where: { id: id } });
+      return await models.user.findOne({ where: { id: id } });
     } catch (e) {
       throw new ChatError("Error", this.getErrors(e));
     }

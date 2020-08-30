@@ -7,15 +7,6 @@ class UserService {
       throw baseService.getErrors(e);
     }
   }
-
-  async getStockQuote(code) {
-    try {
-      const response = await axios.get(`/user/stock-quote/${code}`);
-      return response.data.data;
-    } catch (e) {
-      throw baseService.getErrors(e);
-    }
-  }
 }
 
 const userService = new UserService();

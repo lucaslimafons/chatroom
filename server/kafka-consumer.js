@@ -8,7 +8,6 @@ try {
   consumer = new Consumer(
     client,
     [
-      { topic: process.env.KAFKA_TOPIC_PARSE, partition: 0 },
       { topic: process.env.KAFKA_TOPIC_RESULT, partition: 0 }
     ],
     {
@@ -24,12 +23,7 @@ try {
     console.log('consumer');
     console.log(message);
 
-    if (message.topic == process.env.KAFKA_TOPIC_PARSE) {
-      // Apply parse stock quote here
-      let data = JSON.parse(message.value);
-      consumerService.parseStockQuote(data.code, data.user);
-      
-    } else if (message.topic == process.env.KAFKA_TOPIC_RESULT) {
+    if (message.topic == process.env.KAFKA_TOPIC_RESULT) {
       // Send the result stock quote
       let data = JSON.parse(message.value);
       consumerService.resultStockQuote(data.code, data.user, data.result);

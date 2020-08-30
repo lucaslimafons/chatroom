@@ -5,6 +5,7 @@ const messages = require('../helpers/messages');
 const moment = require('moment');
 const userChatService = require('./user_chat');
 const messageService = require('./message');
+const stockService = require('./stock');
 
 class ChatService extends BaseService {
   constructor (io) {
@@ -37,8 +38,6 @@ class ChatService extends BaseService {
           fromServer: true
         });
 
-        message = await messageService.findById(message.id);
-
         socket.broadcast.emit('message', message);
       }
     } catch (e) {
@@ -56,6 +55,21 @@ class ChatService extends BaseService {
       message = await messageService.findById(message.id);
 
       this.io.emit('message', message);
+
+      if (data.message.startsWith('/stock=')) {
+        let code = data.message.substr(data.message.indexOf('=')+1);
+        let stock = await stockService.getStockQuoteApi(code, data.id);
+        if (stock.data && stock.data.message) {
+          message = await messageService.create({
+            message: stock.data.message,
+            fromServer: true
+          });
+
+          this.io.emit('message', message);
+        } else if (stock.errors && stock.errors.length > 0) {
+          this.io.emit('message', stock.errors[0].message);
+        }
+      }
     } catch (e) {
       console.log(e);
     }

@@ -4,11 +4,6 @@ try {
   const client = new kafka.KafkaClient(process.env.KAFKA_SERVER);
   const topics = [
     {
-      topic: process.env.KAFKA_TOPIC_PARSE,
-      partitions: 1,
-      replicationFactor: 1
-    },
-    {
       topic: process.env.KAFKA_TOPIC_RESULT,
       partitions: 1,
       replicationFactor: 1
